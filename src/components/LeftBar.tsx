@@ -6,16 +6,16 @@ import { usePathname } from "next/navigation";
 import type { User } from "@/lib/fakeApi";
 
 const menuList = [
-  { id: 1, name: "Homepage", link: "/", icon: "home.svg" },
-  { id: 2, name: "Explore", link: "/explore", icon: "explore.svg" },
-  { id: 3, name: "Notification", link: "/notifications", icon: "notification.svg" },
-  { id: 4, name: "Messages", link: "/messages", icon: "message.svg" },
-  { id: 5, name: "Bookmarks", link: "/bookmarks", icon: "bookmark.svg" },
-  { id: 6, name: "Jobs", link: "/jobs", icon: "job.svg" },
-  { id: 7, name: "Communities", link: "/communities", icon: "community.svg" },
-  { id: 8, name: "Premium", link: "/premium", icon: "logo.svg" },
-  { id: 9, name: "Profile", link: "", icon: "profile.svg" },
-  { id: 10, name: "More", link: "/more", icon: "more.svg" },
+  { id: 1, name: "Homepage", link: "/", icon: "icons/home.svg" },
+  { id: 2, name: "Explore", link: "/explore", icon: "icons/explore.svg" },
+  { id: 3, name: "Notification", link: "/notifications", icon: "icons/notification.svg" },
+  { id: 4, name: "Messages", link: "/messages", icon: "icons/message.svg" },
+  { id: 5, name: "Bookmarks", link: "/bookmarks", icon: "icons/bookmark.svg" },
+  { id: 6, name: "Jobs", link: "/jobs", icon: "icons/job.svg" },
+  { id: 7, name: "Communities", link: "/communities", icon: "icons/community.svg" },
+  { id: 8, name: "Premium", link: "/premium", icon: "general/x_logo.png" },
+  { id: 9, name: "Profile", link: "", icon: "icons/profile.svg" },
+  { id: 10, name: "More", link: "/more", icon: "icons/more.svg" },
 ];
 
 const LeftBar = ({ user }: { user?: User | null }) => {
@@ -31,7 +31,7 @@ const LeftBar = ({ user }: { user?: User | null }) => {
           href="/"
           className="p-3 rounded-full hover:bg-hoverGrayStrong transition-colors"
         >
-          <Image path="icons/logo.svg" alt="logo" w={26} h={26} />
+          <Image path="general/x_logo.png" alt="logo" w={26} h={26} />
         </Link>
         {/* MENU LIST */}
         <div className="flex flex-col gap-1">
@@ -48,7 +48,7 @@ const LeftBar = ({ user }: { user?: User | null }) => {
                 key={item.id}
               >
                 <Image
-                  path={`icons/${item.icon}`}
+                  path={item.icon}
                   alt={item.name}
                   w={26}
                   h={26}
