@@ -43,6 +43,14 @@ body {
   background: #3a3f44;
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 input::placeholder {
   color: #71767b;
 }

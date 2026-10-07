@@ -23,14 +23,14 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <div className="max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl xxl:max-w-screen-xxl mx-auto flex justify-between">
-          <div className="px-2 xsm:px-4 xxl:px-8 ">
+          <div className="px-2 xsm:px-4 xxl:px-6 shrink-0">
             <LeftBar user={currentUser} />
           </div>
-          <div className="flex-1 lg:min-w-[600px] border-x-[1px] border-borderGray ">
+          <div className="flex-1 min-w-0 border-x-[1px] border-borderGray ">
             {children}
             {modal}
           </div>
-          <div className="hidden lg:flex ml-4 md:ml-8 flex-1 ">
+          <div className="hidden lg:flex shrink-0 ml-4 md:ml-8 w-[300px] xl:w-[330px] xxl:w-[350px]">
             <RightBar />
           </div>
         </div>

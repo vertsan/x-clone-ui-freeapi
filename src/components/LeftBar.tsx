@@ -23,9 +23,9 @@ const LeftBar = ({ user }: { user?: User | null }) => {
   const profileLink = user ? `/${user.username}` : "/";
 
   return (
-    <div className="h-screen sticky top-0 flex flex-col justify-between pt-2 pb-8">
+    <div className="sticky top-0 flex h-dvh flex-col pt-2 pb-4">
       {/* LOGO MENU BUTTON */}
-      <div className="flex flex-col gap-4 text-lg items-center xxl:items-start">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto no-scrollbar text-lg items-center xxl:items-start">
         {/* LOGO */}
         <Link
           href="/"
@@ -42,7 +42,7 @@ const LeftBar = ({ user }: { user?: User | null }) => {
               <Link
                 href={href}
                 title={item.name}
-                className={`group flex items-center gap-4 rounded-full p-3 transition-colors hover:bg-hoverGrayStrong ${
+                className={`group flex items-center gap-4 rounded-full p-3 [@media(max-height:800px)]:py-2 transition-colors hover:bg-hoverGrayStrong ${
                   active ? "font-bold text-textGrayLight" : "text-textGray"
                 }`}
                 key={item.id}
@@ -76,10 +76,10 @@ const LeftBar = ({ user }: { user?: User | null }) => {
       {/* USER */}
       <Link
         href={profileLink}
-        className="flex items-center justify-between rounded-full p-2 transition-colors hover:bg-hoverGrayStrong cursor-pointer"
+        className="shrink-0 flex items-center justify-between gap-2 rounded-full p-3 transition-colors hover:bg-hoverGrayStrong"
       >
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 relative rounded-full overflow-hidden">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="w-10 h-10 shrink-0 relative rounded-full overflow-hidden">
             <Image
               path={user?.avatar ?? "general/avatar.png"}
               alt={user?.name ?? "Vert San"}
@@ -88,18 +88,22 @@ const LeftBar = ({ user }: { user?: User | null }) => {
               tr={true}
             />
           </div>
-          <div className="hidden xxl:flex flex-col">
-            <span className="font-bold leading-tight">
+          <div className="hidden xxl:flex flex-col min-w-0">
+            <span className="font-bold leading-tight truncate">
               {user?.name ?? "Vert San"}
             </span>
-            <span className="text-sm text-textGray">
+            <span className="text-sm text-textGray truncate">
               {user ? `@${user.username}` : "@vertSan"}
             </span>
           </div>
         </div>
-        <div className="hidden xxl:block cursor-pointer font-bold text-textGray">
-          ...
-        </div>
+        <Image
+          path="icons/infoMore.svg"
+          alt="more"
+          w={18}
+          h={18}
+          className="hidden xxl:block shrink-0"
+        />
       </Link>
     </div>
   );

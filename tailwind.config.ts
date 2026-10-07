@@ -16,6 +16,9 @@ export default {
         xl: "1078px",
         xxl: "1265px",
       },
+      maxWidth: {
+        "screen-xxl": "1265px",
+      },
       colors: {
         textGray: "#71767b",
         textGrayLight: "#e7e9ea",
