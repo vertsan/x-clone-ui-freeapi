@@ -29,7 +29,7 @@ const ProfileTabs = ({
               : "border-transparent font-medium text-textGray hover:text-textGrayLight"
           }`}
         >
-          {labels[tab]}
+          {labels[tab]} 
         </Link>
       );
     })}
