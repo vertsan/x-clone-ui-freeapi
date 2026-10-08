@@ -27,8 +27,8 @@ const ImageEditor = ({
     setSettings((prev) => ({ ...prev, type }));
   };
   return (
-    <div className="fixed w-screen h-screen left-0 top-0 bg-black bg-opacity-75 z-10 flex items-center justify-center">
-      <div className="bg-black rounded-xl p-12 flex flex-col gap-4">
+    <div className="fixed w-screen h-screen left-0 top-0 bg-black bg-opacity-75 z-10 flex items-center justify-center animate-fadeIn">
+      <div className="bg-black rounded-xl p-12 flex flex-col gap-4 animate-scaleIn">
         {/* TOP */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
@@ -36,7 +36,7 @@ const ImageEditor = ({
               width={32}
               viewBox="0 0 24 24"
               onClick={onClose}
-              className="cursor-pointer"
+              className="cursor-pointer transition-transform hover:-translate-x-1"
             >
               <path
                 fill="#e7e9ea"
@@ -45,7 +45,7 @@ const ImageEditor = ({
             </svg>
             <h1 className="font-bold text-xl">Media Settings</h1>
           </div>
-          <button className="py-2 px-4 rounded-full bg-white text-black font-bold" onClick={onClose}>
+          <button className="py-2 px-4 rounded-full bg-white text-black font-bold transition-all hover:brightness-90 active:scale-95" onClick={onClose}>
             Save
           </button>
         </div>
@@ -69,7 +69,7 @@ const ImageEditor = ({
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-8">
             <div
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105"
               onClick={() => handleChangeType("original")}
             >
               <svg width={24} viewBox="0 0 24 24">
@@ -85,7 +85,7 @@ const ImageEditor = ({
               Original
             </div>
             <div
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105"
               onClick={() => handleChangeType("wide")}
             >
               <svg width={24} viewBox="0 0 24 24">
@@ -101,7 +101,7 @@ const ImageEditor = ({
               Wide
             </div>
             <div
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105"
               onClick={() => handleChangeType("square")}
             >
               <svg width={24} viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ const ImageEditor = ({
             </div>
           </div>
           <div
-            className={`cursor-pointer py-1 px-4 rounded-full text-black ${
+            className={`cursor-pointer py-1 px-4 rounded-full text-black transition-all hover:brightness-110 active:scale-95 ${
               settings.sensitive ? "bg-red-500" : "bg-white"
             }`}
             onClick={() => handleChangeSensitive(!settings.sensitive)}

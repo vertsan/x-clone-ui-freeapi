@@ -23,26 +23,27 @@ const LeftBar = ({ user }: { user?: User | null }) => {
   const profileLink = user ? `/${user.username}` : "/";
 
   return (
-    <div className="sticky top-0 flex h-dvh flex-col pt-2 pb-4">
+    <div className="sticky top-0 flex h-dvh flex-col pt-2 pb-4 animate-slideInLeft">
       {/* LOGO MENU BUTTON */}
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto no-scrollbar text-lg items-center xxl:items-start">
         {/* LOGO */}
         <Link
           href="/"
-          className="p-3 rounded-full hover:bg-hoverGrayStrong transition-colors"
+          className="p-3 rounded-full hover:bg-hoverGrayStrong transition-all hover:scale-105 animate-slideUp"
         >
           <Image path="general/x_logo.png" alt="logo" w={26} h={26} />
         </Link>
         {/* MENU LIST */}
         <div className="flex flex-col gap-1">
-          {menuList.map((item) => {
+          {menuList.map((item, i) => {
             const href = item.id === 9 ? profileLink : item.link;
             const active = pathname === href;
             return (
               <Link
                 href={href}
                 title={item.name}
-                className={`group flex items-center gap-4 rounded-full p-3 [@media(max-height:800px)]:py-2 transition-colors hover:bg-hoverGrayStrong ${
+                style={{ animationDelay: `${80 + i * 35}ms` }}
+                className={`group flex items-center gap-4 rounded-full p-3 [@media(max-height:800px)]:py-2 transition-colors hover:bg-hoverGrayStrong animate-slideUp ${
                   active ? "font-bold text-textGrayLight" : "text-textGray"
                 }`}
                 key={item.id}
@@ -62,13 +63,13 @@ const LeftBar = ({ user }: { user?: User | null }) => {
         {/* BUTTON */}
         <Link
           href="/compose/post"
-          className="bg-white text-black rounded-full w-12 h-12 flex items-center justify-center xxl:hidden transition-all hover:brightness-90 active:scale-95"
+          className="bg-white text-black rounded-full w-12 h-12 flex items-center justify-center xxl:hidden transition-all hover:brightness-90 active:scale-95 animate-slideUp [animation-delay:440ms]"
         >
           <Image path="icons/post.svg" alt="new post" w={24} h={24} />
         </Link>
         <Link
           href="/compose/post"
-          className="hidden xxl:block bg-white text-black rounded-full font-bold text-[17px] py-3 px-20 transition-all hover:brightness-90 active:scale-95"
+          className="hidden xxl:block bg-white text-black rounded-full font-bold text-[17px] py-3 px-20 transition-all hover:brightness-90 active:scale-95 animate-slideUp [animation-delay:440ms]"
         >
           Post
         </Link>
@@ -76,7 +77,7 @@ const LeftBar = ({ user }: { user?: User | null }) => {
       {/* USER */}
       <Link
         href={profileLink}
-        className="shrink-0 flex items-center justify-between gap-2 rounded-full p-3 transition-colors hover:bg-hoverGrayStrong"
+        className="shrink-0 flex items-center justify-between gap-2 rounded-full p-3 transition-all hover:bg-hoverGrayStrong animate-slideUp [animation-delay:500ms]"
       >
         <div className="flex min-w-0 items-center gap-3">
           <div className="w-10 h-10 shrink-0 relative rounded-full overflow-hidden">

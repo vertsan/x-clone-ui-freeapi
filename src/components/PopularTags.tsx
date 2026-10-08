@@ -6,7 +6,7 @@ const PopularTags = async () => {
   const trends = await getTrends();
 
   return (
-    <div className="p-4 rounded-2xl border-[1px] border-borderGray flex flex-col gap-4">
+    <div className="p-4 rounded-2xl border-[1px] border-borderGray flex flex-col gap-4 animate-slideInRight [animation-delay:70ms]">
       <h1 className="text-xl font-bold text-textGrayLight">
         {"What's"} Happening
       </h1>

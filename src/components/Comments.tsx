@@ -7,7 +7,7 @@ const Comments = async ({ postId }: { postId: string }) => {
 
   return (
     <div className="">
-      <form className="flex items-center justify-between gap-4 p-4 ">
+      <form className="flex items-center justify-between gap-4 p-4 animate-slideUp">
         <div className="relative w-10 h-10 rounded-full overflow-hidden">
           <Image
             path="general/avatar.png"
@@ -27,12 +27,18 @@ const Comments = async ({ postId }: { postId: string }) => {
         </button>
       </form>
       {comments.length === 0 ? (
-        <div className="p-8 text-center text-textGray">
+        <div className="p-8 text-center text-textGray animate-fadeIn">
           No replies yet. Be the first to reply!
         </div>
       ) : (
-        comments.map((comment) => (
-          <Post key={comment.id} type="comment" post={comment} />
+        comments.map((comment, i) => (
+          <div
+            key={comment.id}
+            className="animate-slideUp"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <Post type="comment" post={comment} />
+          </div>
         ))
       )}
     </div>

@@ -38,7 +38,7 @@ const Share = () => {
   const canPost = (desc.trim().length > 0 || !!media) && remaining >= 0;
 
   return (
-    <form className="flex gap-3 border-b border-borderGray p-4" action={handleSubmit}>
+    <form className="flex gap-3 border-b border-borderGray p-4 animate-slideUp" action={handleSubmit}>
       {/* AVATAR */}
       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
         <Image path="general/avatar.png" alt="" w={100} h={100} tr={true} />
@@ -57,7 +57,7 @@ const Share = () => {
           className="w-full bg-transparent py-2 text-xl outline-none placeholder:text-textGray"
         />
         {focused && (
-          <div className="flex items-center gap-2 text-sm font-bold text-iconBlue">
+          <div className="flex items-center gap-2 text-sm font-bold text-iconBlue animate-slideDown">
             <svg width="16" height="16" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -69,7 +69,7 @@ const Share = () => {
         )}
         {/* PREVIEW IMAGE */}
         {media?.type.includes("image") && previewURL && (
-          <div className="relative overflow-hidden rounded-2xl border border-borderGray">
+          <div className="relative overflow-hidden rounded-2xl border border-borderGray animate-scaleIn">
             <NextImage
               src={previewURL}
               alt=""
@@ -102,7 +102,7 @@ const Share = () => {
         )}
         {/* PREVIEW VIDEO */}
         {media?.type.includes("video") && previewURL && (
-          <div className="relative overflow-hidden rounded-2xl border border-borderGray">
+          <div className="relative overflow-hidden rounded-2xl border border-borderGray animate-scaleIn">
             <video src={previewURL} className="w-full" controls />
             <button
               type="button"
@@ -142,7 +142,7 @@ const Share = () => {
           <div className="flex items-center gap-3">
             {desc.length > 0 && (
               <span
-                className={`text-sm ${
+                className={`text-sm animate-fadeIn ${
                   remaining < 0
                     ? "text-red-500"
                     : remaining <= 20

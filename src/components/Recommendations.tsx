@@ -6,7 +6,7 @@ const Recommendations = async () => {
   const users = await getRecommendations();
 
   return (
-    <div className="p-4 rounded-2xl border-[1px] border-borderGray flex flex-col gap-4">
+    <div className="p-4 rounded-2xl border-[1px] border-borderGray flex flex-col gap-4 animate-slideInRight [animation-delay:140ms]">
       {users.map((user) => (
         <div key={user.id} className="flex items-center justify-between">
           {/* IMAGE AND USER INFO */}
@@ -26,7 +26,7 @@ const Recommendations = async () => {
             </div>
           </div>
           {/* BUTTON */}
-          <button className="py-1 px-4 font-semibold bg-white text-black rounded-full">
+          <button className="py-1 px-4 font-semibold bg-white text-black rounded-full transition-all hover:brightness-90 active:scale-95">
             Follow
           </button>
         </div>

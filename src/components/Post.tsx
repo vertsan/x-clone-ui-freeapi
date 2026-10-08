@@ -28,7 +28,7 @@ const Post = async ({
   const { user } = post;
 
   return (
-    <article className="group/post p-4 border-y-[1px] border-borderGray transition-colors hover:bg-[#080808]">
+    <article className="group/post p-4 border-y-[1px] border-borderGray transition-colors hover:bg-[#080808] animate-fadeIn">
       {/* POST TYPE */}
       {post.repostedBy && (
         <div className="flex items-center gap-2 text-sm text-textGray mb-2 font-semibold">

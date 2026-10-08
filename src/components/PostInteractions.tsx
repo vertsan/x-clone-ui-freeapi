@@ -16,7 +16,7 @@ const PostInteractions = ({
       <div className="flex flex-1 items-center justify-between max-w-md">
         {/* COMMENT */}
         <div className="group flex items-center cursor-pointer">
-          <div className="rounded-full p-2 transition-colors group-hover:bg-iconBlue/10">
+          <div className="rounded-full p-2 transition-all group-hover:bg-iconBlue/10 group-hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -35,7 +35,7 @@ const PostInteractions = ({
         </div>
         {/* REPOST */}
         <div className="group flex items-center cursor-pointer">
-          <div className="rounded-full p-2 transition-colors group-hover:bg-iconGreen/10">
+          <div className="rounded-full p-2 transition-all group-hover:bg-iconGreen/10 group-hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -54,7 +54,7 @@ const PostInteractions = ({
         </div>
         {/* LIKE */}
         <div className="group flex items-center cursor-pointer">
-          <div className="rounded-full p-2 transition-colors group-hover:bg-iconPink/10">
+          <div className="rounded-full p-2 transition-all group-hover:bg-iconPink/10 group-hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -74,7 +74,7 @@ const PostInteractions = ({
       </div>
       <div className="flex items-center gap-1">
         {/* BOOKMARK */}
-        <div className="group cursor-pointer rounded-full p-2 transition-colors hover:bg-iconBlue/10">
+        <div className="group cursor-pointer rounded-full p-2 transition-all hover:bg-iconBlue/10 hover:scale-110 active:scale-95">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -88,7 +88,7 @@ const PostInteractions = ({
           </svg>
         </div>
         {/* SHARE */}
-        <div className="group cursor-pointer rounded-full p-2 transition-colors hover:bg-iconBlue/10">
+        <div className="group cursor-pointer rounded-full p-2 transition-all hover:bg-iconBlue/10 hover:scale-110 active:scale-95">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"

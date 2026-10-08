@@ -8,7 +8,7 @@ const HomeTabs = () => {
   const [active, setActive] = useState("For you");
 
   return (
-    <div className="flex border-b border-borderGray">
+    <div className="flex border-b border-borderGray animate-fadeIn">
       {tabs.map((tab, i) => (
         <button
           key={tab}

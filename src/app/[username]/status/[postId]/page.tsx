@@ -12,13 +12,15 @@ const StatusPage = async ({
 
   return (
     <div className="">
-      <div className="flex items-center gap-8 sticky top-0 backdrop-blur-md p-4 z-10 bg-[#00000084]">
+      <div className="flex items-center gap-8 sticky top-0 backdrop-blur-md p-4 z-10 bg-[#00000084] animate-fadeIn">
         <Link href="/">
           <Image path="icons/back.svg" alt="back" w={24} h={24} />
         </Link>
         <h1 className="font-bold text-lg">Post</h1>
       </div>
-      <Post type="status" postId={postId} />
+      <div className="animate-slideUp">
+        <Post type="status" postId={postId} />
+      </div>
       <Comments postId={postId} />
     </div>
   );
