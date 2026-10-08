@@ -4,7 +4,7 @@ import Image from "@/components/Image";
 import Link from "next/link";
 import ProfileTabs from "@/components/ProfileTabs";
 import VerifiedBadge from "@/components/VerifiedBadge";
-import EditProfileModal from "@/components/EditProfileModal";
+import ProfileActions from "@/components/ProfileActions";
 import {
   getCurrentUser,
   getPostCount,
@@ -91,12 +91,7 @@ const UserPage = async ({
             <Image path="icons/message.svg" alt="more" w={20} h={20} />
           </div>
           {isOwnProfile ? (
-            <button
-              type="button"
-              className="py-1.5 px-5 bg-transparent text-white font-semibold rounded-full border-[1px] border-borderGray transition-all hover:bg-hoverGrayStrong active:scale-95"
-            >
-              Edit profile
-            </button>
+            <ProfileActions user={user} />
           ) : (
             <FollowButton
               userId={user.id}
@@ -183,7 +178,7 @@ const UserPage = async ({
       <ProfileTabs username={user.username} active={tab} />
       {/* FEED */}
       <Feed username={user.username} tab={tab} />
-      {isOwnProfile && <EditProfileModal user={user} onClose={() => {}} />}
+      {false}
     </div>
   );
 };
