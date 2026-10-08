@@ -12,10 +12,10 @@ const FollowButton = ({
   userId: string;
   initialFollowing?: boolean;
   initialFollowers: number;
-  onChange?: (data: { following: boolean; followers: number }) => void;
+  onChange?: () => void;
 }) => {
   const [following, setFollowing] = useState(initialFollowing);
-  const [followers, setFollowers] = useState(initialFollowers);
+  const [, setFollowers] = useState(initialFollowers);
   const [pending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -26,13 +26,16 @@ const FollowButton = ({
   const toggle = () => {
     const next = !following;
     setFollowing(next);
-    setFollowers((prev) => prev + (next ? 1 : -1));
-    onChange?.({ following: next, followers: followers + (next ? 1 : -1) });
+    setFollowers((prev) => {
+      const updated = prev + (next ? 1 : -1);
+      onChange?.();
+      return updated;
+    });
     startTransition(async () => {
       const result = await followAction(userId);
       setFollowing(result.following);
       setFollowers(result.followers);
-      onChange?.(result);
+      onChange?.();
     });
   };
 

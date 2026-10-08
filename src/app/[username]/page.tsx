@@ -71,13 +71,13 @@ const UserPage = async ({
           )}
         </div>
         {/* Spacer to clear the avatar's overflow — avatar is w-1/5 and hangs 50%, so ~10% of container width minus buttons row height */}
-        <div className="h-6 sm:h-8 md:h-10" />
+        <div className="h-10 sm:h-14 md:h-20" />
         {/* USER DETAILS */}
         <div className="px-4 pb-4 flex flex-col gap-3 animate-slideUp [animation-delay:140ms]">
           {/* USERNAME & HANDLE */}
-          <div className="">
-            <h1 className="text-2xl font-bold">{user.name}</h1>
-            <span className="text-textGray text-sm">@{user.username}</span>
+          <div className="flex flex-col items-start">
+            <h1 className="text-2xl font-bold leading-tight">{user.name}</h1>
+            <span className="text-textGray text-sm leading-5">@{user.username}</span>
           </div>
           <p className="whitespace-pre-wrap break-words leading-normal">{user.bio}</p>
           {/* JOB & LOCATION & DATE */}
