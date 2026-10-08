@@ -29,7 +29,13 @@ export type User = {
   followers: number;
   following: number;
   verified?: boolean;
+  link?: string;
+  birthday?: string;
 };
+
+export type ProfileTab = "posts" | "replies" | "media" | "likes";
+
+export const PROFILE_TABS: ProfileTab[] = ["posts", "replies", "media", "likes"];
 
 export type MediaType = "image" | "video";
 
@@ -48,6 +54,7 @@ export type PostData = {
   createdAt: string;
   media?: PostMedia;
   repostedBy?: string;
+  replyTo?: { id: string; username: string };
   comments: number;
   reposts: number;
   likes: number;
@@ -110,12 +117,29 @@ const formatMonthYear = (iso: string): string =>
 
 // --- users ----------------------------------------------------------------
 
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const mapUser = (raw: RandomUserRaw, index: number): User => {
   const seed = raw.login?.uuid ?? String(index);
+  const username = raw.login.username;
+  const linkHash = hash(seed + "link");
   return {
     id: seed,
     name: `${raw.name.first} ${raw.name.last}`,
-    username: raw.login.username,
+    username,
     avatar: raw.picture.large,
     cover: "general/cover.jpg",
     bio: `Hey, I'm ${raw.name.first}! Sharing life and ideas from ${
@@ -126,6 +150,19 @@ const mapUser = (raw: RandomUserRaw, index: number): User => {
     followers: seededInt(seed + "followers", 120, 98_000),
     following: seededInt(seed + "following", 12, 1_400),
     verified: hash(seed + "verified") % 4 === 0,
+    link:
+      linkHash % 4 === 3
+        ? undefined
+        : linkHash % 3 === 0
+          ? `https://github.com/${username}`
+          : linkHash % 3 === 1
+            ? `https://${username}.dev`
+            : `https://${username}.io`,
+    birthday: `${MONTHS[seededInt(seed + "bmon", 0, 11)]} ${seededInt(
+      seed + "bday",
+      1,
+      28
+    )}, ${seededInt(seed + "byear", 1975, 2002)}`,
   };
 };
 
@@ -305,12 +342,86 @@ const buildPost = (index: number, data: FeedData): PostData | null => {
   };
 };
 
+// --- deterministic replies -------------------------------------------------
+// Replies live in their own universe twice the size of the post feed; item `i`
+// is authored by `users[i % users.length]` (same slicing as the feed) and
+// targets a stable post, so a reply id ("r-17") regenerates identically in
+// getPost() for its detail page.
+
+const REPLY_FEED_SIZE = FEED_SIZE * 2;
+
+const buildReply = (index: number, data: FeedData): PostData | null => {
+  const user = pick(data.users, index);
+  if (!user) return null;
+
+  const target = buildPost((index * 5 + 7) % FEED_SIZE, data);
+  if (!target) return null;
+
+  const id = `r-${index}`;
+  return {
+    id,
+    user,
+    replyTo: { id: target.id, username: target.user.username },
+    text: REPLIES[seededInt(id + "text", 0, REPLIES.length - 1)],
+    createdAt: minutesAgo(seededInt(id + "time", 5, 8_000)),
+    comments: seededInt(id + "comments", 0, 60),
+    reposts: seededInt(id + "reposts", 0, 40),
+    likes: seededInt(id + "likes", 0, 900),
+  };
+};
+
 // --- posts created in the composer (in-memory) ----------------------------
 
 let localPostId = 100;
 const localPosts: PostData[] = [];
 
 // --- api ------------------------------------------------------------------
+
+// Which users the simulated current user follows. Follow state only lives for
+// the server process lifetime, like localPosts.
+const followingIds = new Set<string>();
+
+export const isFollowingUser = async (userId: string): Promise<boolean> =>
+  followingIds.has(userId);
+
+export const toggleFollow = async (
+  userId: string
+): Promise<{ following: boolean; followers: number }> => {
+  const data = await loadFeedData();
+  const user = data.users.find((item) => item.id === userId);
+  if (!user) return { following: false, followers: 0 };
+
+  const following = !followingIds.has(userId);
+  if (following) {
+    followingIds.add(userId);
+    user.followers += 1;
+  } else {
+    followingIds.delete(userId);
+    user.followers = Math.max(0, user.followers - 1);
+  }
+  return { following, followers: user.followers };
+};
+
+export const updateCurrentUser = async (input: {
+  name?: string;
+  bio?: string;
+  location?: string;
+  link?: string;
+  birthday?: string;
+  avatar?: string;
+  cover?: string;
+}): Promise<void> => {
+  const data = await loadFeedData();
+  const user = data.users[0];
+  const target = user ?? fallbackUser;
+  Object.assign(
+    target,
+    Object.fromEntries(
+      Object.entries(input).filter(([, value]) => value !== undefined)
+    )
+  );
+  if (!user) data.users.push(target);
+};
 
 export const getUsers = async (): Promise<User[]> => {
   const data = await loadFeedData();
@@ -330,17 +441,45 @@ export const getCurrentUser = async (): Promise<User> => {
 
 export const getPosts = async (options?: {
   username?: string;
+  tab?: ProfileTab;
 }): Promise<PostData[]> => {
   const data = await loadFeedData();
+  const tab = options?.tab ?? "posts";
+  const username = options?.username;
   const posts: PostData[] = [];
 
-  if (options?.username) {
-    const userIndex = data.users.findIndex(
-      (item) => item.username === options.username
-    );
-    if (userIndex >= 0) {
+  const ownIndex = username
+    ? data.users.findIndex((item) => item.username === username)
+    : -1;
+
+  // Replies tab: the profile user's slice of the reply universe.
+  if (tab === "replies") {
+    if (ownIndex >= 0) {
+      for (let i = 0; i < REPLY_FEED_SIZE; i++) {
+        if (i % data.users.length !== ownIndex) continue;
+        const reply = buildReply(i, data);
+        if (reply) posts.push(reply);
+      }
+    }
+    return posts;
+  }
+
+  // Likes tab: a stable cross-section of the feed that this user liked.
+  if (tab === "likes") {
+    if (username) {
+      for (let i = 0; i < FEED_SIZE && posts.length < 30; i++) {
+        const post = buildPost(i, data);
+        if (!post) continue;
+        if (hash(post.id + username + "like") % 4 === 0) posts.push(post);
+      }
+    }
+    return posts;
+  }
+
+  if (username) {
+    if (ownIndex >= 0) {
       for (let i = 0; i < FEED_SIZE; i++) {
-        if (i % data.users.length !== userIndex) continue;
+        if (i % data.users.length !== ownIndex) continue;
         const post = buildPost(i, data);
         if (post) posts.push(post);
       }
@@ -353,18 +492,38 @@ export const getPosts = async (options?: {
   }
 
   const local = localPosts.filter(
-    (post) => !options?.username || post.user.username === options.username
+    (post) => !username || post.user.username === username
   );
 
-  return [
+  const combined = [
     ...local.map((post) => ({ ...post })),
     ...posts.map((post) => ({ ...post })),
   ];
+
+  return tab === "media"
+    ? combined.filter((post) => post.media)
+    : combined;
+};
+
+// Post + reply count shown in the profile's sticky header.
+export const getPostCount = async (username: string): Promise<number> => {
+  const [posts, replies] = await Promise.all([
+    getPosts({ username }),
+    getPosts({ username, tab: "replies" }),
+  ]);
+  return posts.length + replies.length;
 };
 
 export const getPost = async (id: string): Promise<PostData | null> => {
   const local = localPosts.find((item) => item.id === id);
   if (local) return { ...local };
+
+  const replyMatch = /^r-(\d+)$/.exec(id);
+  if (replyMatch) {
+    const data = await loadFeedData();
+    const reply = buildReply(Number(replyMatch[1]), data);
+    return reply ? { ...reply } : null;
+  }
 
   const parsed = /^([qjmpbd])-(\d+)$/.exec(id);
   if (!parsed) return null;

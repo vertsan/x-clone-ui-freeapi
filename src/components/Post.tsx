@@ -47,7 +47,7 @@ const Post = async ({
         </div>
       )}
       {/* POST CONTENT */}
-      <div className={`flex gap-3 ${type === "status" && "flex-col"}`}>
+        <div className={`flex gap-3 ${type === "status" && "flex-col gap-2"}`}>
         {/* AVATAR */}
         <div
           className={`${
@@ -57,7 +57,8 @@ const Post = async ({
           <Image path={user.avatar} alt={user.name} w={100} h={100} tr={true} />
         </div>
         {/* CONTENT */}
-        <div className="flex-1 min-w-0 flex flex-col gap-1">
+        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+
           {/* TOP */}
           <div className="w-full flex justify-between items-start">
             <Link href={`/${user.username}`} className="flex gap-3 min-w-0">
@@ -101,8 +102,20 @@ const Post = async ({
             </Link>
             <PostInfo />
           </div>
+          {/* REPLYING TO */}
+          {post.replyTo && (
+            <Link
+              href={`/${post.replyTo.username}/status/${post.replyTo.id}`}
+              className="text-textGray text-[15px] transition-colors hover:text-textGrayLight -mt-0.5 mb-0.5"
+            >
+              Replying to{" "}
+              <span className="text-iconBlue hover:underline">
+                @{post.replyTo.username}
+              </span>
+            </Link>
+          )}
           {/* TEXT & MEDIA */}
-          <Link href={`/${user.username}/status/${post.id}`}>
+          <Link href={`/${user.username}/status/${post.id}`} className="block">
             <p
               className={`${
                 type === "status"
